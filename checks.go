@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"github.com/pkg/errors"
 	"net/http"
 	"strconv"
@@ -24,4 +26,19 @@ func ValidatePostInfo(queries []FactsStructure) error {
 		}
 	}
 	return nil
+}
+
+func	(h *RequestHandler) MaxId()	{
+
+	row := h.conn.QueryRow(context.Background(), "SELECT CASE" +
+		"WHEN EXISTS (SELECT * FROM facts LIMIT 1) THEN 0" +
+		"ELSE 1 END;")
+	row.Scan(&h.isEmpty)
+	if h.isEmpty	{
+		fmt.Println("It's empty tho")
+	} else {
+		row = h.conn.QueryRow(context.Background(), "SELECT max(id) FROM facts")
+		row.Scan(&h.nRows)
+		fmt.Println("nRows = ", h.nRows)
+	}
 }

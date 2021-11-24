@@ -8,10 +8,12 @@ import (
 	"net/http"
 	"os"
 )
+
+
 type PostQuery map[string][]FactsStructure
 
 type FactsStructure struct	{
-	Id		int		`json:"id,omitempty"`
+	Id		int			`json:"id,omitempty"`
 	Title	string		`json:"title"`
 	Description	string	`json:"description"`
 	Links	[]string	`json:"links,omitempty"`
@@ -25,7 +27,8 @@ const DATABASE_URL string = "postgres://postgres:root@localhost:5432/randomfacts
 type RequestHandler struct	{
 	conn	*pgx.Conn		// db connection
 	sm		*http.ServeMux	// handlers
-	nRows	int			// Couldn't find how to check last inserted id
+	nRows	int				// index of last inserted row
+	isEmpty	bool			// check if anything in table
 	//logging (?)
 
 }
@@ -50,16 +53,14 @@ func initHandling()	{
 	h = newRequestHandler(connection, sm)
 }
 
-func testJson()	{
-}
-
 func main()	{
 	initHandling()
 	defer h.conn.Close(context.Background())
 	log.Printf("Service started\n")
-	testJson()
-	h.runHandlers()
-	//initRequestHandling()
+	h.MaxId()
+	fmt.Println(h.nRows)
+
+	//h.runHandlers()
 
 	// to close DB pool
 

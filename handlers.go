@@ -12,14 +12,17 @@ import (
 	"log"
 )
 
+const secretURL = "/data/another_one/all_of_them/please"
 // URL/
 func generalHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
+	fmt.Println(r.URL.Path)
+	if r.URL.Path == secretURL	{
+		h.getAllData(w, r)
+	} else if r.URL.Path != "/" {
 		http.NotFound(w, r) //<-- http://localhost:8080/abracadabra
 		return
 	}
 	fmt.Fprintf(w, "General Handler\n") // <-- works just fine
-	w.WriteHeader(http.StatusAccepted)
 }
 
 // URL/fact
@@ -29,7 +32,7 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		fmt.Fprintf(w, "Get method called\n")
 		//	TODO: Combine all rows in database
-
+		h.getRandomFact(w, r)
 	case "POST":
 		err := h.parseNewFacts(w, r)
 		if err != nil {

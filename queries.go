@@ -3,6 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"math/rand"
+	"os"
+	"time"
 	//"fmt"
 	"github.com/pkg/errors"
 	"io/ioutil"
@@ -22,6 +26,7 @@ func (h *RequestHandler) addToData(queries []FactsStructure) (val []int, err err
 			return val, err
 		}
 		val = append(val, lastId)
+		h.nRows = lastId
 		log.Printf("INSERT id=%d;title=\"%s\";description=\"%s\";links=%v",
 			lastId, queries[i].Title, queries[i].Description, queries[i].Links)
 	}
@@ -56,7 +61,6 @@ func (h *RequestHandler) parseNewFacts(w http.ResponseWriter, r *http.Request) e
 }
 
 // TODO: JSONIFY
-
 func jsoinfyPostRequest(values []int) (k map[string][]int) {
 
 	k = make(map[string][]int)
@@ -64,21 +68,41 @@ func jsoinfyPostRequest(values []int) (k map[string][]int) {
 	return
 }
 
-func (h *RequestHandler) jsonifyAllData() {
+//TODO: What if there are 0 rows ?
+func (h *RequestHandler) getRandomFact(w http.ResponseWriter, r *http.Request)	{
+	rand.Seed(time.Now().UnixNano())
+	id := rand.Intn(h.nRows)
+	fmt.Println("Chose id ", id)
+	//var response FactsStructure
+	//
+	//row := h.conn.QueryRow(context.Background(), "SELECT FROM facts WHERE id=$1", id)
+	//row.Scan(&response.Id, &response.Title, &response.Description, &response.Links)
+	//w.Header().Set("Content-Type", "facts/json")
+	//json.NewEncoder(w).Encode(response)
+}
 
-	//response
-	//rows, err := h.conn.Query(context.Background(), "SELECT * FROM facts")
-	//if err != nil {
-	//	return
-	//}
-	//defer rows.Close()
-	//for rows.Next() {
-	//	err := rows.Scan(&r.facts.Id, &r.Title, &r.Description, &r.Links)
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
-	//}
-	////jsonifyRecord(r)
+//TODO: Error return maybe ?
+func (h *RequestHandler) getAllData(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("I'm here, notice me pls, scanning all facts")
+	var responseArray []FactsStructure
+	rows, err := h.conn.Query(context.Background(), "SELECT * FROM facts")
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var response FactsStructure
+		err := rows.Scan(&response.Id, &response.Title, &response.Description, &response.Links)
+		if err != nil {
+			log.Fatal(err)
+		}
+		responseArray = append(responseArray, response)
+	}
+	w.Header().Set("Content-Type", "facts/json")
+	json.NewEncoder(w).Encode("")
+	json.NewEncoder(w).Encode(responseArray)
+	json.NewEncoder(os.Stderr).Encode(responseArray)
 	return
 }
 
