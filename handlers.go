@@ -13,75 +13,76 @@ import (
 	"log"
 )
 
-
-
-func handler(w http.ResponseWriter, r *http.Request)	{
-	//	TODO: Do smth, maybe description of valid requests
-	log.Println("signal recieved")
-	fmt.Fprintf(w, "Hello there!\n") // <-- works just fine
-	w.WriteHeader(http.StatusAccepted)
-}
-
-// methods
-func	getHandler(w http.ResponseWriter, r *http.Request)	{
-
-	// switch r.Method
-	// case GET --> get func
-	// case POST --> post func
-	log.Println("signal recieved")
-	//	TODO: Combine all rows in database
-	fmt.Fprintf(w, "Get Handler\n") // <-- works just fine
-	w.WriteHeader(http.StatusAccepted)
-}
-
-func	getUniqueHandler(w http.ResponseWriter, r *http.Request)	{
-	log.Println("signal recieved")
-	//fmt.Fprintf(w, "Unique Handler\n") // <-- works just fine
-	//fmt.Fprintf(w, "%s\n", r.Method) // <-- works just fine
-	//fmt.Fprintf(w, "Request: Host: |%s| Path: |%s|\n", r.Host, r.URL.Path)
-	id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/fact/"))
+func	validateId(w http.ResponseWriter, r *http.Request) (id int, err error)	{
+	id, err = strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/fact/"))	// better to do it with regexpr
 	if err != nil	{
-		fmt.Fprintf(w, "Invalid Index\n")
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		return id, err
 	}
-	fmt.Fprintf(w, "Request for fact No %d\n", id) // <-- works just fine
-	//	TODO: go for Query and, if found index in database, return listing
-	//err = conn.QueryRow("select id, name from users where id = ?", 1).Scan(&id, &name)
-	if err != nil {
-		log.Fatal(err)
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
-	w.WriteHeader(http.StatusFound)
+	return id, nil
 }
 
+// URL/
 func	generalHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.Error(w, "404: not found.", http.StatusNotFound)
+		http.NotFound(w, r)		//<-- http://localhost:8080/abracadabra
 		return
 	}
-	log.Println("signal recieved")
 	fmt.Fprintf(w, "General Handler\n") // <-- works just fine
 	w.WriteHeader(http.StatusAccepted)
 }
 
-func testHandlers()	{
+// URL/fact
+func	getHandler(w http.ResponseWriter, r *http.Request)	{
+	//var records Records
+	switch r.Method	{
+	case "GET":
+		fmt.Fprintf(w, "Get method called\n")
+		//	TODO: Combine all rows in database
+		// GET all values into JSON from DB
+	case "POST":
+		// POST values into DB from JSON
+		fmt.Fprintf(w, "POST method called\n")
+	default:
+		w.WriteHeader(http.StatusBadRequest)
+	}
 
+	w.WriteHeader(http.StatusAccepted)
+}
 
-	sm := http.NewServeMux()
+//	URL/fact/
+func	idHandler(w http.ResponseWriter, r *http.Request)	{
+	id, err := validateId(w, r); if err != nil	{
+		fmt.Fprintf(w, "Invalid Index\n")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	switch r.Method {
+	case "GET":
+		fmt.Fprintf(w, "Get ID=%d method called\n", id)
+		h.getUniqueFact(id)
+	case "PUT":
+		fmt.Fprintf(w, "PUT ID=%d method called\n", id)
+	default:
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	//	TODO: go for Query and, if found index in database, return listing
+	w.WriteHeader(http.StatusFound)
+}
+
+func (h *RequestHandler) runHandlers()	{
+
 	// Let gv{1,2,3} handle routes{1,2,3} respectively
-	sm.HandleFunc("/", generalHandler)
-	sm.HandleFunc("/fact", getHandler)
-	sm.HandleFunc("/fact/", getUniqueHandler)		// <-- regex for id (num)
+	//h.sm.HandleFunc("/fact", getHandler)
+	//h.sm.HandleFunc("/fact/", getUniqueHandler)		// <-- regex for id (num)
+	//h.sm.HandleFunc("/", generalHandler)
 	// TODO: default handler for 404
-	//sm.HandleFunc("", getUniqueHandler)
-	if err := http.ListenAndServe(":8080", sm); err != nil {
+	if err := http.ListenAndServe(":8080", h.sm); err != nil {
 		log.Fatal(err)
 	}
 
 }
-func initRequestHandling()	{
 
-	testHandlers()
-}
+//func initRequestHandling()	{
+//
+//	h.runHandlers()
+//}
