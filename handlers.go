@@ -6,20 +6,11 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strconv"
-	"strings"
 	//"io/ioutil"
 	//"encoding/json"
 	"log"
 )
 
-func	validateId(w http.ResponseWriter, r *http.Request) (id int, err error)	{
-	id, err = strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/fact/"))
-	if err != nil	{
-		return id, err
-	}
-	return id, nil
-}
 
 // URL/
 func	generalHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +24,7 @@ func	generalHandler(w http.ResponseWriter, r *http.Request) {
 
 // URL/fact
 func	getHandler(w http.ResponseWriter, r *http.Request)	{
-	//var records Records
+
 	switch r.Method	{
 	case "GET":
 		fmt.Fprintf(w, "Get method called\n")
@@ -60,7 +51,7 @@ func	idHandler(w http.ResponseWriter, r *http.Request)	{
 	switch r.Method {
 	case "GET":
 		fmt.Fprintf(w, "Get ID=%d method called\n", id)
-		h.getUniqueFact(id)
+		//h.getUniqueFact(id)
 	case "PUT":
 		fmt.Fprintf(w, "PUT ID=%d method called\n", id)
 	default:

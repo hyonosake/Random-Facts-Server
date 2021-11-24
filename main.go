@@ -8,41 +8,13 @@ import (
 	"net/http"
 	"os"
 )
-
+type PostQuery map[string][]FactsStructure
 
 type FactsStructure struct	{
-	Id		int64		`json:"id"`
+	Id		int		`json:"id,omitempty"`
 	Title	string		`json:"title"`
 	Description	string	`json:"description"`
 	Links	[]string	`json:"links,omitempty"`
-}
-
-type Records []FactsStructure
-
-var j = `{
-"title": "с ссылками",
-"description": "некоторые факты имеют ссылки на дополнительную информацию", "links": [
-        "http://ozon.ru" ]
-}`
-
-var ll = `{
-"facts":	[
-			{
-				"title": "без ссылок",
-				"description": "некоторые факты не имеют ссылок на дополнительную информацию"
-			},
-			{
-				"title": "с ссылками",
-				"description": "некоторые факты имеют ссылки на дополнительную информацию",
-				"links": [
-					"http://ozon.ru"
-				]
-			}
-		] 
-}`
-
-func (r *Records) Print()	{
-	fmt.Println(r)
 }
 
 var h *RequestHandler
@@ -53,6 +25,7 @@ const DATABASE_URL string = "postgres://postgres:root@localhost:5432/randomfacts
 type RequestHandler struct	{
 	conn	*pgx.Conn		// db connection
 	sm		*http.ServeMux	// handlers
+	nRows	int			// Couldn't find how to check last inserted id
 	//logging (?)
 
 }
