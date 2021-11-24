@@ -2,19 +2,13 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/jackc/pgx/v4"
-	"io"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 )
 
-type Records struct {
-	Facts	[]FactsStructure
-}
 
 type FactsStructure struct	{
 	Id		int64		`json:"id"`
@@ -22,6 +16,8 @@ type FactsStructure struct	{
 	Description	string	`json:"description"`
 	Links	[]string	`json:"links,omitempty"`
 }
+
+type Records []FactsStructure
 
 var j = `{
 "title": "с ссылками",
@@ -82,36 +78,6 @@ func initHandling()	{
 }
 
 func testJson()	{
-	// Using json.Unmarshal
-	var it FactsStructure
-	err := json.Unmarshal([]byte(j), &it)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(it)
-
-	// Using a json.Decoder
-	var it2 FactsStructure
-	dec := json.NewDecoder(strings.NewReader(j))
-	if err := dec.Decode(&it2); err != nil && err != io.EOF {
-		panic(err)
-	}
-	fmt.Println(it2)
-	var it3 map[string][]Records
-	dec = json.NewDecoder(strings.NewReader(ll))
-	if err := dec.Decode(&it3); err != nil && err != io.EOF {
-		panic(err)
-	}
-	//fmt.Println(it3["facts"])
-
-	var reading map[string]interface{}
-	err = json.Unmarshal([]byte(ll), &reading)
-	if err != nil	{
-		log.Println("Err parsing")
-	}
-	fmt.Printf("%+v\n", reading)
-	fmt.Println()
-	fmt.Println()
 }
 
 func main()	{

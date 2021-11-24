@@ -14,7 +14,7 @@ import (
 )
 
 func	validateId(w http.ResponseWriter, r *http.Request) (id int, err error)	{
-	id, err = strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/fact/"))	// better to do it with regexpr
+	id, err = strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/fact/"))
 	if err != nil	{
 		return id, err
 	}
@@ -42,6 +42,7 @@ func	getHandler(w http.ResponseWriter, r *http.Request)	{
 	case "POST":
 		// POST values into DB from JSON
 		fmt.Fprintf(w, "POST method called\n")
+		h.parseNewFacts(w, r)
 	default:
 		w.WriteHeader(http.StatusBadRequest)
 	}
