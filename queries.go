@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -12,7 +13,7 @@ import (
 )
 
 
-// Creates map {key : values}
+// mapForIds creates map {key : values}
 func mapForIds(key string, values []int) (k map[string][]int) {
 
 	k = make(map[string][]int)
@@ -21,7 +22,7 @@ func mapForIds(key string, values []int) (k map[string][]int) {
 }
 
 
-// Function for adding new data into DB
+// addToData INSERT data into DB
 func (h *RequestHandler) addToData(queries []FactsStructure) (val []int, err error) {
 
 	var lastId int
@@ -55,12 +56,10 @@ func (h *RequestHandler) postNewFacts(w http.ResponseWriter, r *http.Request) (i
 		fmt.Println("Hey im here btw")
 		return values, err
 	}
-	err = ValidatePostInfo(facts["facts"])
-	if err != nil {
+	err = ValidatePostInfo(facts["facts"]); if err != nil {
 		return values, err
 	}
-	values, err = h.addToData(facts["facts"])
-	if err != nil {
+	values, err = h.addToData(facts["facts"]); if err != nil {
 		return values, err
 	}
 	return mapForIds("ids", values), nil
@@ -135,9 +134,9 @@ func (h *RequestHandler) putUniqueFact(r *http.Request, id int) (any interface{}
 		fmt.Println("2nd err")
 		return any, err
 	}
-	if fact.Title == "" || fact.Description == ""	|| fact.Id != id {
+	if fact.Title == "" || fact.Description == ""	|| fact.Id != id || fact.Id == 0{
 		fmt.Println("3rd err")
-		return any, err
+		return any, errors.New("invalid id")
 	}
 	_, err = h.db.Exec(context.Background(),
 		"UPDATE facts SET(title, description, links) = ($1, $2, $3) WHERE id=$4",

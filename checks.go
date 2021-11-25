@@ -30,7 +30,7 @@ func ValidatePostInfo(queries []FactsStructure) error {
 }
 
 // MaxId Set h.nRows value to amount of rows in DB table
-func	(h *RequestHandler) MaxId()	{
+func (h *RequestHandler) MaxId()	{
 
 	var temp int
 	row := h.db.QueryRow(context.Background(), "SELECT CASE WHEN EXISTS (SELECT * FROM facts LIMIT 1) THEN 0" +
