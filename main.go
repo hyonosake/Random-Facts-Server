@@ -21,47 +21,56 @@ type FactsStructure struct	{
 
 var h *RequestHandler
 
-const DATABASE_URL string = "postgres://postgres:root@localhost:5432/randomfacts"
+const DbFacts string = "postgres://postgres:root@localhost:5432/randomfacts"
+const DbLog string = "postgres://postgres:root@localhost:5432/randomfacts"
 
 
 type RequestHandler struct	{
-	conn	*pgx.Conn		// db connection
+	db		*pgx.Conn		// db connection
+	logs	*pgx.Conn		// logs data
 	sm		*http.ServeMux	// handlers
 	nRows	int				// index of last inserted row
 	isEmpty	bool			// check if anything in table
-	//logging (?)
 
+	//logging (?)
 }
 
-func newRequestHandler(_conn *pgx.Conn, _sm *http.ServeMux)	*RequestHandler  {
+func newRequestHandler(_conn *pgx.Conn, _sm *http.ServeMux, _ *pgx.Conn)	*RequestHandler  {
 	return &RequestHandler	{
-		conn: _conn,
+		//logs: logdb,
+		db: _conn,
 		sm: _sm,
 	}
 }
 
 func initHandling()	{
-	connection, err := pgx.Connect(context.Background(), DATABASE_URL)
+	connection, err := pgx.Connect(context.Background(), DbFacts)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
+	logs, err := pgx.Connect(context.Background(), DbLog)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+
 	var sm = http.NewServeMux()
 	sm.HandleFunc("/fact", getHandler)
 	sm.HandleFunc("/fact/", idHandler)		// <-- regex for id (num)
 	sm.HandleFunc("/", generalHandler)
-	h = newRequestHandler(connection, sm)
+	h = newRequestHandler(connection, sm, logs)
 }
 
 func main()	{
 	initHandling()
-	defer h.conn.Close(context.Background())
+	defer h.db.Close(context.Background())
+	//defer h.logs.Close(context.Background())
 	log.Printf("Service started\n")
 	h.MaxId()
 	fmt.Println(h.nRows)
 
-	//h.runHandlers()
-
+	h.runHandlers()
 	// to close DB pool
 
 

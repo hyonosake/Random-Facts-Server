@@ -15,14 +15,14 @@ import (
 const secretURL = "/data/another_one/all_of_them/please"
 // URL/
 func generalHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path)
+	fmt.Fprintln(w, r.URL.Path)
 	if r.URL.Path == secretURL	{
 		h.getAllData(w, r)
 	} else if r.URL.Path != "/" {
-		http.NotFound(w, r) //<-- http://localhost:8080/abracadabra
+		http.NotFound(w, r)
 		return
 	}
-	fmt.Fprintf(w, "General Handler\n") // <-- works just fine
+	//fmt.Fprintf(w, "General Handler\n") // <-- works just fine
 }
 
 // URL/fact
@@ -37,7 +37,7 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 		err := h.parseNewFacts(w, r)
 		if err != nil {
 			fmt.Fprintf(w, "Failed: %v\n", err)
-			w.WriteHeader(http.StatusBadRequest)
+			//w.WriteHeader(http.StatusBadRequest)
 		}
 	default:
 		// TODO: Make valid err value
@@ -52,7 +52,7 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 func idHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := validateId(w, r)
 	if err != nil {
-		fmt.Fprintf(w, "Invalid Index\n")
+		//fmt.Fprintf(w, "Invalid Index\n")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

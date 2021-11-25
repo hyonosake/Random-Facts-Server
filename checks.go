@@ -30,14 +30,15 @@ func ValidatePostInfo(queries []FactsStructure) error {
 
 func	(h *RequestHandler) MaxId()	{
 
-	row := h.conn.QueryRow(context.Background(), "SELECT CASE" +
-		"WHEN EXISTS (SELECT * FROM facts LIMIT 1) THEN 0" +
-		"ELSE 1 END;")
-	row.Scan(&h.isEmpty)
+	var temp int
+	row := h.db.QueryRow(context.Background(), "SELECT CASE WHEN EXISTS (SELECT * FROM facts LIMIT 1) THEN 0" +
+		"ELSE 1 END")
+	row.Scan(&temp)
+	h.isEmpty = temp == 1
 	if h.isEmpty	{
 		fmt.Println("It's empty tho")
 	} else {
-		row = h.conn.QueryRow(context.Background(), "SELECT max(id) FROM facts")
+		row = h.db.QueryRow(context.Background(), "SELECT max(id) FROM facts")
 		row.Scan(&h.nRows)
 		fmt.Println("nRows = ", h.nRows)
 	}

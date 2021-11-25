@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"os"
 	"time"
 	//"fmt"
 	"github.com/pkg/errors"
@@ -19,7 +18,7 @@ func (h *RequestHandler) addToData(queries []FactsStructure) (val []int, err err
 
 	var lastId int
 	for i := range queries {
-		err := h.conn.QueryRow(context.Background(),
+		err := h.db.QueryRow(context.Background(),
 			"INSERT into facts (title, description, links) VALUES($1, $2, $3) RETURNING id",
 			queries[i].Title, queries[i].Description, queries[i].Links).Scan(&lastId)
 		if err != nil {
@@ -70,23 +69,24 @@ func jsoinfyPostRequest(values []int) (k map[string][]int) {
 
 //TODO: What if there are 0 rows ?
 func (h *RequestHandler) getRandomFact(w http.ResponseWriter, r *http.Request)	{
-	rand.Seed(time.Now().UnixNano())
-	id := rand.Intn(h.nRows)
-	fmt.Println("Chose id ", id)
-	//var response FactsStructure
-	//
-	//row := h.conn.QueryRow(context.Background(), "SELECT FROM facts WHERE id=$1", id)
-	//row.Scan(&response.Id, &response.Title, &response.Description, &response.Links)
-	//w.Header().Set("Content-Type", "facts/json")
-	//json.NewEncoder(w).Encode(response)
+
+	response := FactsStructure{}
+	if h.isEmpty == false {
+		rand.Seed(time.Now().UnixNano())
+		id := rand.Intn(h.nRows)
+		fmt.Println("Chose id ", id)
+		row := h.db.QueryRow(context.Background(), "SELECT FROM facts WHERE id=$1", id)
+		row.Scan(&response.Id, &response.Title, &response.Description, &response.Links)
+	}
+	w.Header().Set("Content-Type", "facts/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 //TODO: Error return maybe ?
 func (h *RequestHandler) getAllData(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("I'm here, notice me pls, scanning all facts")
-	var responseArray []FactsStructure
-	rows, err := h.conn.Query(context.Background(), "SELECT * FROM facts")
+	var responseArray = make([]FactsStructure, 1)
+	rows, err := h.db.Query(context.Background(), "SELECT * FROM facts")
 	if err != nil {
 		return
 	}
@@ -100,14 +100,12 @@ func (h *RequestHandler) getAllData(w http.ResponseWriter, r *http.Request) {
 		responseArray = append(responseArray, response)
 	}
 	w.Header().Set("Content-Type", "facts/json")
-	json.NewEncoder(w).Encode("")
 	json.NewEncoder(w).Encode(responseArray)
-	json.NewEncoder(os.Stderr).Encode(responseArray)
 	return
 }
 
 //func (h *RequestHandler) getUniqueFact(id int) ()	{
-//	rows, err := h.conn.Query(context.Background(),
+//	rows, err := h.db.Query(context.Background(),
 //		"SELECT id, title, description FROM facts WHERE id = $1", id)
 //	if err != nil	{
 //		return r, err
