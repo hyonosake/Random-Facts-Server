@@ -16,7 +16,7 @@ import (
 func sendResponse(w http.ResponseWriter, response interface{})  {
 	fmt.Printf("Sending JSON Data back for response")
 	fmt.Println(response)
-	//TODO: http.StatusAccepted
+	//TODO: http.StatusAccepted - must it be implemented?
 	w.Header().Set("Content-Type", "facts/json")
 	json.NewEncoder(w).Encode(response)
 }
