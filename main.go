@@ -57,7 +57,7 @@ func initHandling()	{
 
 	var sm = http.NewServeMux()
 	sm.HandleFunc("/fact", getHandler)
-	sm.HandleFunc("/fact/", idHandler)		// <-- regex for id (num)
+	sm.HandleFunc("/fact/", idSpecifiedHandler)		// <-- regex for id (num)
 	sm.HandleFunc("/", generalHandler)
 	h = newRequestHandler(connection, sm, logs)
 }
@@ -69,7 +69,10 @@ func main()	{
 	log.Printf("Service started\n")
 	h.MaxId()
 	fmt.Println(h.nRows)
-
+	//var any interface{}
+	//any = 5
+	//any = 2.4
+	//fmt.Println(any)
 	h.runHandlers()
 	// to close DB pool
 

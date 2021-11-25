@@ -43,3 +43,7 @@ func	(h *RequestHandler) MaxId()	{
 		fmt.Println("nRows = ", h.nRows)
 	}
 }
+
+func emptyJson() interface{}{
+	return make(map[string]string)
+}

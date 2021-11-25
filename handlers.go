@@ -5,6 +5,7 @@ package main
 // sql injection
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	//"io/ioutil"
@@ -12,65 +13,80 @@ import (
 	"log"
 )
 
+func sendResponse(w http.ResponseWriter, response interface{})  {
+	fmt.Printf("Sending JSON Data back for response")
+	fmt.Println(response)
+	//TODO: http.StatusAccepted
+	w.Header().Set("Content-Type", "facts/json")
+	json.NewEncoder(w).Encode(response)
+}
+
 const secretURL = "/data/another_one/all_of_them/please"
-// URL/
+
+
+// Get main page with some data (possibly); Acces secretURL
 func generalHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, r.URL.Path)
+	var err error
+	var jsonResponse interface{}
 	if r.URL.Path == secretURL	{
-		h.getAllData(w, r)
+		jsonResponse, err = h.getAllData(); if err != nil	{
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
 	} else if r.URL.Path != "/" {
+		w.WriteHeader(http.StatusNotFound)
 		http.NotFound(w, r)
 		return
 	}
-	//fmt.Fprintf(w, "General Handler\n") // <-- works just fine
+	sendResponse(w, jsonResponse)
 }
 
-// URL/fact
+// Handle GET and POST for URL/fact
 func getHandler(w http.ResponseWriter, r *http.Request) {
 
+	var jsonResponse interface{}
+	var err error
 	switch r.Method {
 	case "GET":
-		fmt.Fprintf(w, "Get method called\n")
-		//	TODO: Combine all rows in database
-		h.getRandomFact(w, r)
+		jsonResponse = h.getRandomFact()
 	case "POST":
-		err := h.parseNewFacts(w, r)
-		if err != nil {
-			fmt.Fprintf(w, "Failed: %v\n", err)
-			//w.WriteHeader(http.StatusBadRequest)
-		}
+		jsonResponse, err = h.postNewFacts(w, r)
 	default:
-		// TODO: Make valid err value
-		fmt.Fprintf(w, "Unknown request %v\n", r.URL)
 		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
-	// TODO: http: superfluous response.WriteHeader call from main.getHandler (handlers.go:43)
-	//w.WriteHeader(http.StatusAccepted)
+	if err != nil	{
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	sendResponse(w, jsonResponse)
 }
 
-//	URL/fact/
-func idHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := validateId(w, r)
-	if err != nil {
-		//fmt.Fprintf(w, "Invalid Index\n")
-		w.WriteHeader(http.StatusBadRequest)
+//	Handle GET and PUT for URL/fact/$id
+func idSpecifiedHandler(w http.ResponseWriter, r *http.Request) {
+
+	var jsonResponse interface{}
+	id, err := validateId(w, r); if err != nil {
+		http.NotFound(w, r)
 		return
 	}
 	switch r.Method {
 	case "GET":
-		fmt.Fprintf(w, "Get ID=%d method called\n", id)
-		//h.getUniqueFact(id)
+		jsonResponse = h.getUniqueFact(id)
 	case "PUT":
-		fmt.Fprintf(w, "PUT ID=%d method called\n", id)
+		fmt.Println("here")
+		jsonResponse, err = h.putUniqueFact(r, id)
 	default:
-		w.WriteHeader(http.StatusBadRequest)
-		// TODO: Make valid err value
-		fmt.Fprintf(w, "Unknown request %v\n", r.URL)
+		w.WriteHeader(http.StatusForbidden)
 		return
 	}
-	//	TODO: go for Query and, if found index in database, return listing
-	w.WriteHeader(http.StatusFound)
+	if err != nil	{
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	sendResponse(w, jsonResponse)
 }
+
 
 func (h *RequestHandler) runHandlers() {
 

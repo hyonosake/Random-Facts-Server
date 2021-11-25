@@ -6,14 +6,21 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-	//"fmt"
-	"github.com/pkg/errors"
+
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
-//TODO: return value of a function
+// Creates map {key : values}
+func mapForIds(key string, values []int) (k map[string][]int) {
+
+	k = make(map[string][]int)
+	k[key] = values
+	return
+}
+
+// Function for adding data into DB
 func (h *RequestHandler) addToData(queries []FactsStructure) (val []int, err error) {
 
 	var lastId int
@@ -32,63 +39,59 @@ func (h *RequestHandler) addToData(queries []FactsStructure) (val []int, err err
 	return val, nil
 }
 
-func (h *RequestHandler) parseNewFacts(w http.ResponseWriter, r *http.Request) error {
 
+// Validate and add new facts to DB
+func (h *RequestHandler) postNewFacts(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+
+	var values []int
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		return errors.New("Bad request")
+		return values, err
 	}
 	var facts PostQuery
 	err = json.Unmarshal([]byte(body), &facts)
 	if err != nil {
-		//TODO: check what if returns error. Superfluous response.WriteHeader call from here
-		return errors.New("Invalid POST request body")
+		fmt.Println("Hey im here btw")
+		return values, err
 	}
 	err = ValidatePostInfo(facts["facts"])
 	if err != nil {
-		return errors.New("Invalid POST request body")
+		return values, err
 	}
-	val, err := h.addToData(facts["facts"])
+	values, err = h.addToData(facts["facts"])
 	if err != nil {
-		return errors.New("Unable to add to data")
+		return values, err
 	}
-	// TODO: What's that?
-	w.Header().Set("Content-Type", "facts/json")
-	//TODO: return { "ids": val }. Is it ok to do it here?
-	json.NewEncoder(w).Encode(jsoinfyPostRequest(val))
-	return nil
+	return mapForIds("ids", values), nil
 }
 
-// TODO: JSONIFY
-func jsoinfyPostRequest(values []int) (k map[string][]int) {
-
-	k = make(map[string][]int)
-	k["ids"] = values
-	return
-}
 
 //TODO: What if there are 0 rows ?
-func (h *RequestHandler) getRandomFact(w http.ResponseWriter, r *http.Request)	{
+func (h *RequestHandler) getRandomFact() interface{}	{
 
 	response := FactsStructure{}
 	if h.isEmpty == false {
 		rand.Seed(time.Now().UnixNano())
 		id := rand.Intn(h.nRows)
-		fmt.Println("Chose id ", id)
-		row := h.db.QueryRow(context.Background(), "SELECT FROM facts WHERE id=$1", id)
+		if id == 0	{
+			id += 1
+		}
+		fmt.Println("Chose ", id)
+		row := h.db.QueryRow(context.Background(), "SELECT * FROM facts WHERE id=$1", id)
 		row.Scan(&response.Id, &response.Title, &response.Description, &response.Links)
+		fmt.Printf("%v\n", response)
 	}
-	w.Header().Set("Content-Type", "facts/json")
-	json.NewEncoder(w).Encode(response)
+	return response
 }
 
-//TODO: Error return maybe ?
-func (h *RequestHandler) getAllData(w http.ResponseWriter, r *http.Request) {
 
-	var responseArray = make([]FactsStructure, 1)
+//TODO: Error return maybe ?
+func (h *RequestHandler) getAllData() (any interface{}, err error) {
+
+	result := make([]FactsStructure, 1)	// TODO: check
 	rows, err := h.db.Query(context.Background(), "SELECT * FROM facts")
 	if err != nil {
-		return
+		return make(map[string]string), err
 	}
 	defer rows.Close()
 	for rows.Next() {
@@ -97,26 +100,51 @@ func (h *RequestHandler) getAllData(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		responseArray = append(responseArray, response)
+		result = append(result, response)
 	}
-	w.Header().Set("Content-Type", "facts/json")
-	json.NewEncoder(w).Encode(responseArray)
+	if len(result) == 0	{
+		return make(map[string]string), nil
+	}
+	return result, nil
+}
+
+
+// returns specific fact from DB based on ID passed
+func (h *RequestHandler) getUniqueFact(id int) (any FactsStructure)	{
+
+	row := h.db.QueryRow(context.Background(),
+		"SELECT id, title, description, links FROM facts WHERE id = $1", id)
+	row.Scan(&any.Id, &any.Title, &any.Description, &any.Links)
 	return
 }
 
-//func (h *RequestHandler) getUniqueFact(id int) ()	{
-//	rows, err := h.db.Query(context.Background(),
-//		"SELECT id, title, description FROM facts WHERE id = $1", id)
-//	if err != nil	{
-//		return r, err
-//	}
-//	defer rows.Close()
-//	//for rows.Next() {
-//	//	err := rows.Scan(&r.facts.Id, &r.Title, &r.Description, &r.Links)
-//	//	if err != nil {
-//	//		log.Fatal(err)
-//	//	}
-//	//}
-//	//jsonifyRecord(r)
-//	return r, nil
-//}
+
+// Changes specific fact from DB based on ID passed
+func (h *RequestHandler) putUniqueFact(r *http.Request, id int) (any interface{}, err error)	{
+
+	body, err := ioutil.ReadAll(r.Body)
+	any = make(map[string]string)
+	if err != nil {
+		fmt.Println("1st err")
+		return any, err
+	}
+	var fact FactsStructure
+	err = json.Unmarshal([]byte(body), &fact)
+	if err != nil{
+		fmt.Println("2nd err")
+		return any, err
+	}
+	if fact.Title == "" || fact.Description == ""	|| fact.Id != id {
+		fmt.Println("3rd err")
+		return any, err
+	}
+	_, err = h.db.Exec(context.Background(),
+		"UPDATE facts SET(title, description, links) = ($1, $2, $3) WHERE id=$4",
+		fact.Title, fact.Description, fact.Links, fact.Id)
+	if err != nil {
+		fmt.Println("4th err")
+		return any, err
+	}
+	fmt.Println("empty err")
+	return any, nil
+}
