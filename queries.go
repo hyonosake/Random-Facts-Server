@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math/rand"
-	"time"
-
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
+	"time"
 )
+
 
 // Creates map {key : values}
 func mapForIds(key string, values []int) (k map[string][]int) {
@@ -20,7 +20,8 @@ func mapForIds(key string, values []int) (k map[string][]int) {
 	return
 }
 
-// Function for adding data into DB
+
+// Function for adding new data into DB
 func (h *RequestHandler) addToData(queries []FactsStructure) (val []int, err error) {
 
 	var lastId int
@@ -66,7 +67,7 @@ func (h *RequestHandler) postNewFacts(w http.ResponseWriter, r *http.Request) (i
 }
 
 
-//TODO: What if there are 0 rows ?
+// Returns fact corresponding to random chosen ID
 func (h *RequestHandler) getRandomFact() interface{}	{
 
 	response := FactsStructure{}
@@ -85,7 +86,7 @@ func (h *RequestHandler) getRandomFact() interface{}	{
 }
 
 
-//TODO: Error return maybe ?
+// Pulls all data from DB
 func (h *RequestHandler) getAllData() (any interface{}, err error) {
 
 	result := make([]FactsStructure, 1)	// TODO: check

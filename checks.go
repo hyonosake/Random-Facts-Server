@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+//validateId checks if given ID presents in DB
 func	validateId(w http.ResponseWriter, r *http.Request) (id int, err error)	{
 	id, err = strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/fact/"))
 	if err != nil	{
@@ -17,7 +18,7 @@ func	validateId(w http.ResponseWriter, r *http.Request) (id int, err error)	{
 	return id, nil
 }
 
-// validate incoming data
+// ValidatePostInfo validates incoming POST data
 func ValidatePostInfo(queries []FactsStructure) error {
 
 	for _, v := range queries	{
@@ -28,6 +29,7 @@ func ValidatePostInfo(queries []FactsStructure) error {
 	return nil
 }
 
+// MaxId Set h.nRows value to amount of rows in DB table
 func	(h *RequestHandler) MaxId()	{
 
 	var temp int
@@ -44,6 +46,7 @@ func	(h *RequestHandler) MaxId()	{
 	}
 }
 
+// emptyJson returns interface body for empty response
 func emptyJson() interface{}{
 	return make(map[string]string)
 }

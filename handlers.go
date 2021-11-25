@@ -7,12 +7,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
-	//"io/ioutil"
-	//"encoding/json"
+	//"github.com/sirupsen/logrus" ( ? )
 	"log"
+	"net/http"
 )
 
+// sendResponse sends response with JSONified response interface
 func sendResponse(w http.ResponseWriter, response interface{})  {
 	fmt.Printf("Sending JSON Data back for response")
 	fmt.Println(response)
@@ -21,10 +21,8 @@ func sendResponse(w http.ResponseWriter, response interface{})  {
 	json.NewEncoder(w).Encode(response)
 }
 
-const secretURL = "/data/another_one/all_of_them/please"
 
-
-// Get main page with some data (possibly); Acces secretURL
+// generalHandler handles main page and checks access for secretURL
 func generalHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var jsonResponse interface{}
@@ -41,7 +39,8 @@ func generalHandler(w http.ResponseWriter, r *http.Request) {
 	sendResponse(w, jsonResponse)
 }
 
-// Handle GET and POST for URL/fact
+
+// getHandler handles GET and POST for URL/fact
 func getHandler(w http.ResponseWriter, r *http.Request) {
 
 	var jsonResponse interface{}
@@ -62,7 +61,7 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 	sendResponse(w, jsonResponse)
 }
 
-//	Handle GET and PUT for URL/fact/$id
+//	idSpecifiedHandler handles GET and PUT for URL/fact/$id
 func idSpecifiedHandler(w http.ResponseWriter, r *http.Request) {
 
 	var jsonResponse interface{}
@@ -88,6 +87,7 @@ func idSpecifiedHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
+// runHandlers ListenAndServe with ServerMux
 func (h *RequestHandler) runHandlers() {
 
 	if err := http.ListenAndServe(":8080", h.sm); err != nil {
