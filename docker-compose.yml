@@ -19,5 +19,6 @@ services:
       - database
     networks:
       - default
+    restart: on-failure
     ports:
       - "8080:80"

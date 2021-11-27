@@ -25,8 +25,6 @@ func (s *server) addToData(queries []FactsStructure) (val []int, err error) {
 		}
 		val = append(val, lastId)
 		s.nRows = lastId
-		log.Printf("INSERT id=%d;title=\"%s\";description=\"%s\";links=%v",
-			lastId, queries[i].Title, queries[i].Description, queries[i].Links)
 	}
 	return val, nil
 }
@@ -36,11 +34,12 @@ func (s *server) addToData(queries []FactsStructure) (val []int, err error) {
 func (s *server) postNewFacts(r *http.Request) (interface{}, error) {
 
 	var values []int
+	var facts PostQuery
+
 	body, err := ioutil.ReadAll(r.Body); if err != nil {
 		return values, err
 	}
 	defer r.Body.Close()
-	var facts PostQuery
 	err = json.Unmarshal([]byte(body), &facts)
 	if err != nil {
 		return values, err
@@ -112,17 +111,15 @@ func (s *server) getAllData() (any interface{}, err error) {
 // putUniqueFact changes specific fact from DB based on ID passed
 func (s *server) putUniqueFact(r *http.Request, id int) (any interface{}, err error)	{
 
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		return any, err
-	}
 	any = make(map[string]string)
 	var fact FactsStructure
-	err = json.Unmarshal([]byte(body), &fact)
-	if err != nil{
+	body, err := ioutil.ReadAll(r.Body); if err != nil	{
+		return any, err
+	}
+	err = json.Unmarshal([]byte(body), &fact); if err != nil	{
 		return any, errors.New("Unable to unmarshal JSON")
 	}
-	if fact.Title == "" || fact.Description == ""	|| fact.Id != id || fact.Id == 0{
+	if fact.Title == "" || fact.Description == ""	|| fact.Id != id || fact.Id == 0	{
 		return any, errors.New("invalid id")
 	}
 	_, err = s.db.Exec(context.Background(),

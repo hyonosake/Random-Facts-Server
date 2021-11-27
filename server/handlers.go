@@ -14,6 +14,7 @@ const secretURL = "/data/another_one/all_of_them/please"
 // HandleRoot handles main page and checks access for secretURL
 func HandleRoot(w http.ResponseWriter, r *http.Request) {
 
+	s.logger.Printf("recieved %s", r.Method)
 	switch r.URL.Path {
 	case secretURL:
 		jsonResponse, err := s.getAllData(); if err != nil {
@@ -26,13 +27,13 @@ func HandleRoot(w http.ResponseWriter, r *http.Request) {
 	default:
 		RespondErr(w, http.StatusInternalServerError, "Page Not Found")
 	}
-	s.logger.Printf("recieved %s", r.Method)
 }
 
 
 // HandleFact handles GET and POST for URL/fact
 func HandleFact(w http.ResponseWriter, r *http.Request) {
 
+	s.logger.Printf("recieved %s", r.Method)
 	switch r.Method {
 	case http.MethodGet:
 		response, err := s.getRandomFact(); if err != nil	{
@@ -49,13 +50,13 @@ func HandleFact(w http.ResponseWriter, r *http.Request) {
 	default:
 		RespondErr(w, http.StatusMethodNotAllowed, "Method not allowed")
 	}
-	s.logger.Printf("recieved %s", r.Method)
 }
 
 
 //	HandleFactId handles GET and PUT for URL/fact/$id
 func HandleFactId(w http.ResponseWriter, r *http.Request) 	{
 
+	s.logger.Printf("recieved %s", r.Method)
 	var jsonResponse interface{}
 	id, err := ValidateId(r); if err != nil {
 		RespondErr(w, http.StatusBadRequest, "Request not allowed")
@@ -77,7 +78,6 @@ func HandleFactId(w http.ResponseWriter, r *http.Request) 	{
 	default:
 		RespondErr(w, http.StatusBadRequest, "Invalid json message received")
 	}
-	s.logger.Printf("recieved %s", r.Method)
 }
 
 

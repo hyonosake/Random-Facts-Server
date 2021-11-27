@@ -39,12 +39,9 @@ func (s *server) MaxId()	{
 		"ELSE 1 END")
 	row.Scan(&temp)
 	s.isEmpty = temp == 1
-	if s.isEmpty	{
-		fmt.Println("It's empty tho")
-	} else {
+	if s.isEmpty != false	{
 		row = s.db.QueryRow(context.Background(), "SELECT max(id) FROM facts")
 		row.Scan(&s.nRows)
-		fmt.Println("nRows = ", s.nRows)
 	}
 }
 
