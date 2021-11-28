@@ -126,6 +126,8 @@ git clone https://github.com/hyonosake/Random-Facts-Server/ && cd Random-Facts-S
 docker-compose up
 ```
 3. Open your browser or API-testing app, enter ```localhost:8080/fact``` and make some requests!
+## Testing
+tests folder provides json-exported Queries from Postman. 
 
 
 
