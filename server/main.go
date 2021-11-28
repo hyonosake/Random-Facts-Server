@@ -28,6 +28,7 @@ type server struct	{
 var s *server
 
 const DbFacts string = "postgres://postgres:root@database:5432/postgres"
+const DbFactsLhost string = "postgres://postgres:root@localhost:5432/postgres"
 
 
 // newRequestHandler links handler and data
@@ -52,7 +53,7 @@ func initHandling()	{
 
 func main()	{
 	initHandling()
-	f, err := os.OpenFile("APIlogs.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile("API_logs.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Println(err)
 	}

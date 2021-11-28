@@ -119,7 +119,7 @@ func (s *server) putUniqueFact(r *http.Request, id int) (any interface{}, err er
 	err = json.Unmarshal([]byte(body), &fact); if err != nil	{
 		return any, errors.New("Unable to unmarshal JSON")
 	}
-	if fact.Title == "" || fact.Description == ""	|| fact.Id != id || fact.Id == 0	{
+	if badQueryData(&fact, id)	{
 		return any, errors.New("invalid id")
 	}
 	_, err = s.db.Exec(context.Background(),

@@ -15,6 +15,10 @@ const secretURL = "/data/another_one/all_of_them/please"
 func HandleRoot(w http.ResponseWriter, r *http.Request) {
 
 	s.logger.Printf("recieved %s", r.Method)
+	if r.Method != http.MethodGet	{
+		RespondErr(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
 	switch r.URL.Path {
 	case secretURL:
 		jsonResponse, err := s.getAllData(); if err != nil {
@@ -36,6 +40,9 @@ func HandleFact(w http.ResponseWriter, r *http.Request) {
 	s.logger.Printf("recieved %s", r.Method)
 	switch r.Method {
 	case http.MethodGet:
+		if s.nRows == 0	{
+			RespondErr(w, http.StatusBadRequest, "Db is empty")
+		}
 		response, err := s.getRandomFact(); if err != nil	{
 			RespondErr(w, http.StatusBadRequest, "Unable to get random ID")
 		} else {

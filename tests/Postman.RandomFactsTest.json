@@ -1,0 +1,673 @@
+{
+	"info": {
+		"_postman_id": "07d68864-2ca6-4060-8829-33e71290b8a5",
+		"name": "Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Invalid Unique GET #2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/0",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid URL #1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/abracadabra",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"abracadabra"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid URL #2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/fact/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"fact",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid Unique GET #1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/g",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"g"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid Unique GET",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/3334",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"3334"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid secret GET",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/data/another_one/all_of_them/please",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data",
+						"another_one",
+						"all_of_them",
+						"please"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid Unique GET",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid random fact GET",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"btitle\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid POST structure",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact"
+					]
+				},
+				"description": "Invalid request body"
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid  POST (empty)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid POST empty title",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid POST field name",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"btitle\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid POST empty description",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"ff\",\n            \"description\": \"\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid single POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid mass POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"високосная секунда\",\n            \"description\": \"Дополнительная (висоќосная, скачущая) сеќунда[4][5][6], или сеќунда координ́ации[7] (англ. leap second) — секунда, иногда добавляемая (теоретически возможно и вычитание) в шкалу всемирного координированного времени (UTC) для согласования его со средним солнечным временем UT1.\",\n            \"links\": [\n                \"shorturl.at/dwzK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\",\n            \"links\": [\n                \"shortuasdadrl.at/dwasjdajkskdazK9\"\n            ]\n        },\n        {\n            \"title\": \"секунда\",\n            \"description\": \"shshahdhasdhjajhdhjjashjdjhad\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact"
+					]
+				},
+				"description": "Valid POST with 3 ret"
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid PUT struct (no facts allowed)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": [\n        {\n            \"title\": \"444444444444\",\n            \"description\": \"444444444444444444444444444444444444\",\n            \"links\": [\n                \"444444444444.com\", \"444444444444.ru\"\n            ]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/4",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid PUT struct #2",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 4,\n    \"title\": \"444444444444\",\n    \"description\": \"444444444444444444444444444444444444\",\n    \"links\": [\n        \"444444444444.com\",\n        \"444444444444.ru\"\n    ]\n}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/4",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid PUT ID=3 (empty)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid PUT (ids does not match)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 5,\n    \"title\": \"444444444444\",\n    \"description\": \"444444444444444444444444444444444444\",\n    \"links\": [\n        \"444444444444.com\",\n        \"444444444444.ru\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/4",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid PUT (empty title)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 5,\n    \"title\": \"\",\n    \"description\": \"444444444444444444444444444444444444\",\n    \"links\": [\n        \"444444444444.com\",\n        \"444444444444.ru\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/4",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid PUT ID=3",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 3,\n    \"title\": \"333333\",\n    \"description\": \"333333333\",\n    \"links\": [\n        \"3333333.ru\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid PUT (empty descr)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 5,\n    \"title\": \"444444444444444444444444444444444444\",\n    \"description\": \"\",\n    \"links\": [\n        \"444444444444.com\",\n        \"444444444444.ru\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/fact/4",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fact",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

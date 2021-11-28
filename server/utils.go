@@ -68,3 +68,8 @@ func mapForIds(key string, values []int) (k map[string][]int) {
 	k[key] = values
 	return
 }
+
+func badQueryData(fact *FactsStructure, urlid int)	bool	{
+	return fact.Id == 0 || fact.Id != urlid || fact.Description == "" || fact.Title == ""
+
+}

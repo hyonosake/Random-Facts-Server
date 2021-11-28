@@ -13,7 +13,7 @@ type ErrMsg struct {
 // Respond sends JSONified data and writes HTTP Header
 func Respond(w http.ResponseWriter, status int, data interface{}) {
 
-	s.logger.Printf("answered with %v\n", data, status)
+	s.logger.Printf("answered with %v\n", data)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	if data != nil {
