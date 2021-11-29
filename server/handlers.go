@@ -1,8 +1,5 @@
 package main
 
-//	testing package
-//	mock server
-// sql injection
 
 import (
 	"net/http"
