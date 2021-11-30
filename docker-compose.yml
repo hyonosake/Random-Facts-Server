@@ -1,16 +1,18 @@
 version: "3.9"
 services:
   database:
+    container_name: PG_base
     image: postgres:14.1
     environment:
-      POSTGRES_DB: "postgres"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "root"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./db:/docker-entrypoint-initdb.d/
     ports:
-      - "5432"
+      - ${PG_PORT}
   server:
+    container_name: API_server
     build:
       context: .
       dockerfile: Dockerfile

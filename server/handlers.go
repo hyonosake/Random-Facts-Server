@@ -1,11 +1,11 @@
 package main
 
-
 import (
 	"net/http"
+	"os"
 )
 
-const secretURL = "/data/another_one/all_of_them/please"
+var secretURL = os.Getenv("SECRET_URL")
 
 
 // HandleRoot handles main page and checks access for secretURL

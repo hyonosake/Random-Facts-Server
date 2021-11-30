@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -18,7 +17,7 @@ func Respond(w http.ResponseWriter, status int, data interface{}) {
 	w.WriteHeader(status)
 	if data != nil {
 		if encodeBody(w, data) != nil	{
-			fmt.Println("failed to encode")
+			s.logger.Println("failed to encode")
 		}
 	}
 }

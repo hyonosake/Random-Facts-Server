@@ -27,7 +27,6 @@ type server struct	{
 
 var s *server
 
-const DbFacts string = "postgres://postgres:root@database:5432/postgres"
 const DbFactsLhost string = "postgres://postgres:root@localhost:5432/postgres"
 
 
@@ -42,7 +41,7 @@ func newRequestHandler(_conn *pgx.Conn, _router *http.ServeMux)	*server  {
 // initHandling connects to DB and link paths to handler functions
 func initHandling()	{
 
-	connection, err := pgx.Connect(context.Background(), DbFacts)
+	connection, err := pgx.Connect(context.Background(), os.Getenv("DB_CONN"))
 	s = newRequestHandler(connection, http.NewServeMux())
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %v\n", err)
@@ -52,6 +51,7 @@ func initHandling()	{
 
 
 func main()	{
+
 	initHandling()
 	f, err := os.OpenFile("API_logs.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {

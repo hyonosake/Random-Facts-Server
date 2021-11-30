@@ -70,7 +70,6 @@ func (s *server) getUniqueFact(id int) (any FactsStructure, err error) {
 // getRandomFact returns fact corresponding to randomly chosen ID
 func (s *server) getRandomFact() (response interface{}, err error)	{
 
-	//var response  FactsStructure
 	if s.isEmpty == false {
 		rand.Seed(time.Now().UnixNano())
 		id := rand.Intn(s.nRows)
