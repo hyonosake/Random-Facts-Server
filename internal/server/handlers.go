@@ -1,88 +1,118 @@
 package server
 
 import (
+	"context"
+	"encoding/json"
+	"fmt"
 	"go.uber.org/zap"
 	"net/http"
-	"os"
+	"time"
 )
 
-var secretURL = os.Getenv("SECRET_URL")
+//var secretURL = os.Getenv("SECRET_URL")
+var secretURL = "/data/another_one/all_of_them/please"
+
+func (s *Server) getJSONResponse(resp interface{}) []byte {
+	body, err := json.MarshalIndent(resp, "", " ")
+	if err != nil {
+		s.logger.Error("Unable to marshal data", zap.Error(err))
+	}
+	return body
+}
 
 // HandleRoot handles main page and checks access for secretURL
 func (s *Server) handleRoot(w http.ResponseWriter, r *http.Request) {
+	s.logger.Info("handleRoot operating fact", zap.String("method", r.Method))
 
-	s.logger.Info("Handler called", zap.String("method", r.Method))
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
 	if r.Method != http.MethodGet {
-		RespondErr(w, http.StatusMethodNotAllowed, "Method not allowed")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	fmt.Println("path:", r.URL.Path)
+	fmt.Println("path:", secretURL)
 	switch r.URL.Path {
 	case secretURL:
-		jsonResponse, err := s.getAllData()
+		resp, err := s.getAllData(ctx)
 		if err != nil {
-			RespondErr(w, http.StatusInternalServerError, "Unable to read from database")
+			s.logger.Error("Unable to process data", zap.Error(err))
+			w.WriteHeader(http.StatusInternalServerError)
 		} else {
-			Respond(w, http.StatusFound, jsonResponse)
+			w.WriteHeader(http.StatusOK)
+			w.Write(s.getJSONResponse(resp))
 		}
-	case "/":
-		Respond(w, http.StatusOK, "Welcome")
 	default:
-		RespondErr(w, http.StatusInternalServerError, "Page Not Found")
+		w.Write([]byte(`Please, specify request path.`))
+		w.WriteHeader(http.StatusBadRequest)
 	}
 }
 
 // HandleFact handles GET and POST for URL/fact
 func (s *Server) handleFact(w http.ResponseWriter, r *http.Request) {
+	s.logger.Info("handleFact operating fact", zap.Any("method", r.Method))
 
-	s.logger.Info("received fact", zap.Any("method", r.Method))
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
+
 	switch r.Method {
 	case http.MethodGet:
-		response, err := s.getRandomFact()
-		_, _ = response, err
-		//if err != nil {
-		//	RespondErr(w, http.StatusBadRequest, "Unable to get random ID")
-		//} else {
-		//	Respond(w, http.StatusFound, response)
-		//}
+		resp, err := s.getRandomFact(ctx)
+		if err != nil {
+			s.logger.Error("Unable to process data", zap.Error(err))
+			w.WriteHeader(http.StatusBadRequest)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			w.Write(s.getJSONResponse(resp))
+		}
 	case http.MethodPost:
-		jsonResponse, err := s.postNewFacts(r)
-		_, _ = jsonResponse, err
-		//if err != nil {
-		//	RespondErr(w, http.StatusBadRequest, "Unable to POST")
-		//} else {
-		//	Respond(w, http.StatusCreated, jsonResponse)
-		//}
+		resp, err := s.postNewFacts(r)
+		if err != nil {
+			s.logger.Error("Unable to process data", zap.Error(err))
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			w.Write(s.getJSONResponse(resp))
+		}
 	default:
-		RespondErr(w, http.StatusMethodNotAllowed, "Method not allowed")
+		w.WriteHeader(http.StatusBadRequest)
 	}
 }
 
 //	handleFactId handles GET and PUT for URL/fact/$id
 func (s *Server) handleFactId(w http.ResponseWriter, r *http.Request) {
+	s.logger.Info("handleFactId operating fact", zap.Any("method", r.Method))
 
-	s.logger.Info("Handler called", zap.String("method", r.Method))
-	var jsonResponse interface{}
-	id, err := ValidateId(r)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
+
+	id, err := validateId(r)
 	if err != nil {
-		RespondErr(w, http.StatusBadRequest, "Request not allowed")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	switch r.Method {
 	case "GET":
-		jsonResponse, err = s.getUniqueFact(id)
+		resp, err := s.getUniqueFact(id)
 		if err != nil {
-			RespondErr(w, http.StatusNotFound, "Does not exist")
+			s.logger.Error("Unable to process data", zap.Error(err))
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
 		} else {
-			Respond(w, http.StatusFound, jsonResponse)
+			w.WriteHeader(http.StatusOK)
+			w.Write(s.getJSONResponse(resp))
 		}
 	case "PUT":
-		jsonResponse, err = s.putUniqueFact(r)
+		resp, err := s.putUniqueFact(ctx, r)
 		if err != nil {
-			RespondErr(w, http.StatusBadRequest, "Invalid json message received")
+			s.logger.Error("Unable to process data", zap.Error(err))
+			w.WriteHeader(http.StatusInternalServerError)
 		} else {
-			Respond(w, http.StatusFound, jsonResponse)
+			w.WriteHeader(http.StatusOK)
+			w.Write(s.getJSONResponse(resp))
 		}
 	default:
-		RespondErr(w, http.StatusBadRequest, "Invalid json message received")
+		//RespondErr(w, http.StatusBadRequest, "Invalid json message received")
 	}
 }

@@ -1,10 +1,19 @@
 package main
 
-import "github.com/hyonosake/Random-Facts-Server/internal/server"
+import (
+	"context"
+	"github.com/hyonosake/Random-Facts-Server/internal/server"
+	"log"
+)
 
 func main() {
-	s := server.New()
-	//go s.HealthCheck()
-	//s.Run
+
+	ctx := context.Background()
+	s, err := server.New(ctx)
+	if err != nil {
+		log.Fatalf("Unable to craete server: %v\n", err)
+	}
+	go s.HealthCheck(ctx)
+	s.Run(ctx)
 
 }

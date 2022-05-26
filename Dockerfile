@@ -5,6 +5,7 @@ WORKDIR go/src/github.com/APIserver
 
 # Enable go modules
 ENV GO111MODULE=on
+#ENV GOPATH=go/src/github.com/APIserver
 
 # Install git.
 RUN apk update && apk add --no-cache git
@@ -20,6 +21,8 @@ RUN go mod download
 COPY . .
 
 # Build the application.
-RUN cd server && go build -o server .
+RUN go build -o $PWD/bin/server $PWD/cmd
 
-CMD ["./server/server"]
+
+
+CMD ["./bin/server"]
